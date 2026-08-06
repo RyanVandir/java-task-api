@@ -1,8 +1,11 @@
 package com.ryan.task_api.controller;
 
+import com.ryan.task_api.dto.TaskResponse;
+import com.ryan.task_api.mapper.TaskMapper;
 import com.ryan.task_api.model.Task;
-import com.ryan.task_api.repository.TaskRepository;
+import com.ryan.task_api.service.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,15 +15,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskController {
 
-    private final TaskRepository taskRepository;
+    private final TaskService service;
+    private final TaskMapper mapper;
 
     @PostMapping
-    public Task save(@RequestBody Task task){
-        return taskRepository.save(task);
+    public ResponseEntity<TaskResponse> save(@RequestBody Task task) {
+        return ResponseEntity.ok(
+                mapper.toResponse(service.create(task))
+        );
     }
 
     @GetMapping
-    public List<Task> findAll(){
-        return taskRepository.findAll();
+    public ResponseEntity<List<TaskResponse>> findAll() {
+        return ResponseEntity.ok(
+                mapper.toResponse(service.findAll())
+        );
     }
 }
