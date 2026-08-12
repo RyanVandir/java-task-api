@@ -20,4 +20,8 @@ public class TaskService {
     public List<Task> findAll(){
         return taskRepository.findAll();
     }
+
+    public void deleteById(Integer id){
+         taskRepository.deleteById(id);
+    }
 }

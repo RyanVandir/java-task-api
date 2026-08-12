@@ -31,4 +31,10 @@ public class TaskController {
                 mapper.toResponse(service.findAll())
         );
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
+        service.deleteById(id);
+       return ResponseEntity.noContent().build();
+    }
 }
