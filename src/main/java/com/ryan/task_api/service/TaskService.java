@@ -1,5 +1,6 @@
 package com.ryan.task_api.service;
 
+import com.ryan.task_api.dto.TaskResponse;
 import com.ryan.task_api.model.Task;
 import com.ryan.task_api.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,17 @@ public class TaskService {
 
     public void deleteById(Integer id){
          taskRepository.deleteById(id);
+    }
+
+    public Task patchById(Integer id,  TaskResponse response){
+        Task task =  taskRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Task not found"));
+        if (response.title() != null){
+            task.setTitle(response.title());
+        }
+        if (response.description() != null){
+            task.setDescription(response.description());
+        }
+        return taskRepository.save(task);
     }
 }

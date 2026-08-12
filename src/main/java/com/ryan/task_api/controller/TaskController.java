@@ -4,6 +4,7 @@ import com.ryan.task_api.dto.TaskResponse;
 import com.ryan.task_api.mapper.TaskMapper;
 import com.ryan.task_api.model.Task;
 import com.ryan.task_api.service.TaskService;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,9 @@ public class TaskController {
     @GetMapping
     public ResponseEntity<List<TaskResponse>> findAll() {
         return ResponseEntity.ok(
-                mapper.toResponse(service.findAll())
+                mapper.toResponse(
+                        service.findAll()
+                )
         );
     }
 
@@ -36,5 +39,14 @@ public class TaskController {
     public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
         service.deleteById(id);
        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<TaskResponse> patchById(@PathVariable Integer id, @RequestBody TaskResponse task) {
+        return ResponseEntity.ok(
+                mapper.toResponse(
+                        service.patchById(id, task)
+                )
+        );
     }
 }
