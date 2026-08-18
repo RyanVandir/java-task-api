@@ -4,8 +4,8 @@ import com.ryan.task_api.dto.TaskResponse;
 import com.ryan.task_api.mapper.TaskMapper;
 import com.ryan.task_api.model.Task;
 import com.ryan.task_api.service.TaskService;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,10 +35,22 @@ public class TaskController {
         );
     }
 
+    @GetMapping("/v2")
+    public ResponseEntity<Page<Task>> getAllTasksDirect(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction
+    ) {
+        return ResponseEntity.ok(
+                service.getTasks(page, size, sortBy, direction)
+        );
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
         service.deleteById(id);
-       return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
